@@ -51,10 +51,11 @@ def get_alert(session,alert_id):
     filters = {
 
     }
-    campaigns = session.get(base_url + '/api/v2/public/alerts/' + alert_id, params=filters)
-    return campaigns
+    alert = session.get(base_url + '/api/v2/public/alerts/' + alert_id, params=filters)
+    return alert
 
 session = open_trellix_session()
 alert_id = "alert_id"
 print(get_alert(session,alert_id).text)
 close_trellix_session(session)
+
