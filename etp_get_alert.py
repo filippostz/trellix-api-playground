@@ -32,7 +32,7 @@ def trellix_api_auth(key=api_key, id=client_id, token=client_token, scopes=allow
     if res.ok:
         access_token = res.json()['access_token']
         headers['Authorization'] = 'Bearer ' + access_token
-        headers['Content-Type'] = 'application/vnd.api+json'
+        headers['Content-Type'] = 'application/json'
         session.headers.update(headers)
         return session
     else:
@@ -54,8 +54,20 @@ def get_alert(session,alert_id):
     alert = session.get(base_url + '/api/v2/public/alerts/' + alert_id, params=filters)
     return alert
 
+def search_alerts(session):
+    filters = {
+    "date_range":
+            {
+                "from": "2025-09-02T06:45:01Z",
+                "to": "2025-09-29T15:45:01Z"
+            },
+    }
+    alerts = session.post(base_url + '/api/v2/public/alerts/search', json=filters)
+    return alerts
+
 session = open_trellix_session()
 alert_id = "alert_id"
 print(get_alert(session,alert_id).text)
 close_trellix_session(session)
+
 
