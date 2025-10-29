@@ -66,8 +66,10 @@ def search_alerts(session):
     return alerts
 
 session = open_trellix_session()
-alert_id = "alert_id"
-print(get_alert(session,alert_id).text)
+#alert_id = "alert_id"
+#print(get_alert(session,alert_id).text)
+print(search_alerts(session).text)
 close_trellix_session(session)
+
 
 
