@@ -1,45 +1,49 @@
+#!/usr/bin/env python3
 import requests
-import datetime
 
 API_KEY = ""
-BASE_URL = "https://etp.us.fireeye.com"
-API_ENDPOINT = f"{BASE_URL}/api/v2/public/alerts/search"
 
-def get_etp_alerts():
-    """
-    Fetches alerts from the FireEye ETP API from the last 24 hours.
-    """
+base_url = "https://etp.us.fireeye.com"
 
-    # Set the headers with your API key
-    headers = {
-        "x-fireeye-api-key": API_KEY,
-        "Content-Type": "application/json"
+headers = {
+    "x-fireeye-api-key": API_KEY,
+    "Content-Type": "application/json"
+}
+
+def get_alert(alert_id):
+    filters = {
+
     }
+    alert = requests.get(base_url + '/api/v2/public/alerts/' + alert_id, headers=headers, params=filters)
+    return alert
 
-    time_24_hours_ago = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=1)
-
+def search_alerts():
     filters = {
     "date_range":
             {
-                "from": "2025-10-02T06:45:01Z",
-                "to": "2025-10-30T16:45:01Z"
+                "from": "2025-09-02T06:45:01Z",
+                "to": "2025-10-30T17:45:01Z"
             },
     }
+    alerts = requests.post(base_url + '/api/v2/public/alerts/search', headers=headers, json=filters)
+    return alerts
 
-    try:
-        response = requests.post(API_ENDPOINT, headers=headers, json=filters)
+def search_traces():
+    options = {
 
-        if response.status_code == 200:
-            alerts_data = response.json()
-            print(alerts_data)
-            alerts_list = alerts_data.get('data', [])
-            print(alerts_list)
+            "attributes": {
+                "lastModifiedDateTime": {
+                    "value": "2025-10-29T09:14:53.276Z",
+                    "filter": ">"
+                }
+            }
+        ,
 
-    except requests.exceptions.RequestException as e:
-        print(f"A connection error occurred: {e}")
+    "size": 300
+}
+    traces = requests.post(base_url + '/api/v1/messages/trace', headers=headers,json=options)
+    return traces
 
-if __name__ == "__main__":
-    if API_KEY == "":
-        print("Error: Please update the 'API_KEY' variable in the script.")
-    else:
-        get_etp_alerts()
+#alert_id = "alert_id"
+#print(get_alert(session,alert_id).text)
+print(search_alerts().text)
