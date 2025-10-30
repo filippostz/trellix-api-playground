@@ -2,11 +2,8 @@ import requests
 import datetime
 
 API_KEY = ""
-
 BASE_URL = "https://etp.us.fireeye.com"
-
 API_ENDPOINT = f"{BASE_URL}/api/v2/public/alerts/search"
-
 
 def get_etp_alerts():
     """
@@ -20,8 +17,6 @@ def get_etp_alerts():
     }
 
     time_24_hours_ago = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=1)
-
-    start_time_str = time_24_hours_ago.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]
 
     filters = {
     "date_range":
@@ -43,9 +38,8 @@ def get_etp_alerts():
     except requests.exceptions.RequestException as e:
         print(f"A connection error occurred: {e}")
 
-
 if __name__ == "__main__":
-    if API_KEY == "YOUR_API_KEY_HERE":
+    if API_KEY == "":
         print("Error: Please update the 'API_KEY' variable in the script.")
     else:
         get_etp_alerts()
