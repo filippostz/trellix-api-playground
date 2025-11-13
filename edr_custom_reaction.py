@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import sys
 import requests
 import time
@@ -165,7 +164,7 @@ def main():
         with create_trellix_session(
                 API_KEY, CLIENT_ID, CLIENT_TOKEN, DEFAULT_SCOPES
         ) as session:
-
+            #custom_reaction_host(session, custom_action_name, hostname)
             custom_reaction_host(session, "_Ping", "TAP01")
 
     except Exception as e:
@@ -174,4 +173,5 @@ def main():
 
 
 if __name__ == "__main__":
+
     main()
